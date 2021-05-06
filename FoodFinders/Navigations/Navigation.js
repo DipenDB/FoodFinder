@@ -13,6 +13,7 @@ import DrawerContent from "../Screens/Drawer/DrawerContent";
 import Bookmark from "../Screens/BookmarkStack/Bookmark";
 import Setting from "../Screens/SettingStack/Setting";
 import Support from "../Screens/SupportStack/Support";
+import RootStackScreen from "./AuthNavigations/RootStackScreen";
 
 
 
@@ -24,12 +25,13 @@ const Tab = createMaterialBottomTabNavigator();
 const Navigation=()=>{
     return(
         <NavigationContainer>
-            <Drawer.Navigator initialRouteName="Home" drawerContent={props => <DrawerContent {...props} />}>
-                <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
-                <Drawer.Screen name="Bookmark" component={Bookmark} />
-                <Drawer.Screen name="Setting" component={Setting} />
-                <Drawer.Screen name="Support" component={Support} />
-            </Drawer.Navigator>
+            <RootStackScreen/>
+            {/*<Drawer.Navigator initialRouteName="Home" drawerContent={props => <DrawerContent {...props} />}>*/}
+            {/*    <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />*/}
+            {/*    <Drawer.Screen name="Bookmark" component={Bookmark} />*/}
+            {/*    <Drawer.Screen name="Setting" component={Setting} />*/}
+            {/*    <Drawer.Screen name="Support" component={Support} />*/}
+            {/*</Drawer.Navigator>*/}
         </NavigationContainer>
     )
 }
