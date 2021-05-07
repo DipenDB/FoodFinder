@@ -12,10 +12,13 @@ import {
 import 'react-native-gesture-handler';
 import Navigation from "./FoodFinders/Navigations/Navigation";
 import {Provider as PaperProvider} from 'react-native-paper'
+import AuthProvider from "./FoodFinders/Store/Provider/AuthProvider";
 const App= () => {
   return (
       <PaperProvider>
-        <Navigation/>
+        <AuthProvider>
+          <Navigation/>
+        </AuthProvider>
       </PaperProvider>
 
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View,
     Text,
     TouchableOpacity,
@@ -15,6 +15,8 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
 
+import {AuthContext} from '../../Store/Context/AuthContext'
+
 const SignInScreen=({navigation})=>{
     const [data,setData]= React.useState({
         email:'',
@@ -22,6 +24,8 @@ const SignInScreen=({navigation})=>{
         check_textInputChange:false,
         secureTextEntry:true,
     })
+    const authContext =useContext(AuthContext)
+
 
 
     const textInputChange=(val)=>{
@@ -142,7 +146,7 @@ const SignInScreen=({navigation})=>{
 
                 <View style={styles.button}>
                     <TouchableOpacity
-                        onPress={()=>{}}
+                        onPress={()=>authContext.signIn}
                     >
                         <LinearGradient
                             colors={['#08d4c4', '#01ab9d']}
