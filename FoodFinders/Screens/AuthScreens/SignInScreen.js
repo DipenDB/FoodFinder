@@ -16,40 +16,70 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
 
 import {AuthContext} from '../../Store/Context/AuthContext'
+import temporalRef from "@babel/runtime/helpers/esm/temporalRef";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
+import {useTheme} from "react-native-paper";
+import {color} from "react-native-reanimated";
 
 const SignInScreen=({navigation})=>{
+
+    const {colors} = useTheme();
+
     const [data,setData]= React.useState({
         email:'',
         password:'',
         check_textInputChange:false,
         secureTextEntry:true,
+
+        isValidUser:true,
+        isValidPassword:true,
     })
     const authContext =useContext(AuthContext)
 
 
 
     const textInputChange=(val)=>{
-        if (val.length != 0){
+        if (val.length >= 4){
             setData({
                 ...data,
                 email:val,
-                check_textInputChange: true
+                check_textInputChange: true,
+
+                //To authenticate if user enter 4 digit long
+                isValidUser:true,
             })
         }
         else {
             setData({
                 ...data,
                 email:val,
-                check_textInputChange: false
+                check_textInputChange: false,
+
+                //To authenticate if user enter 4 digit long
+                isValidUser:false,
             })
         }
     }
 
     const handlePasswordChange=(val)=>{
-        setData({
-            ...data,
-            password: val,
-        })
+        if (val.length >= 8){
+            setData({
+                ...data,
+                password: val,
+
+                //To authenticate if user enter 8 digit long password
+                isValidPassword:true,
+            })
+        }else {
+            setData({
+                ...data,
+                password: val,
+
+                //To authenticate if user enter 8 digit long password
+                isValidPassword:false,
+            })
+        }
+
     }
 
     const updateSecureTextEntry=()=>{
@@ -60,33 +90,56 @@ const SignInScreen=({navigation})=>{
     }
 
 
+    //second method to handel user to show error message
+    const handleValidUser=(e)=>{
+        if (e.trim().length>=4){
+            setData({
+                ...data,
+                isValidUser:true,
+            })
+        }
+        else {
+            setData({
+                ...data,
+                isValidUser:false,
+            })
+        }
+    }
+
+
+
     return(
         <View style={styles.container}>
             <StatusBar backgroundColor='#009387' barStyle="light-content"/>
 
             <View style={styles.header}>
-                <Text style={styles.text_header}>Register Now</Text>
+                <Text style={styles.text_header}>Welcome</Text>
             </View>
 
 
             <Animatable.View
                 animation='fadeInUpBig'
-                style={styles.footer}>
+                style={[styles.footer,{backgroundColor: colors.background}]}>
+
+                <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{flex: 1, width:'100%'}}
+                                         keyboardShouldPersistTaps='always'>
 
                 {/*=================================================================*/}
-                <Text style={styles.text_footer}>Email</Text>
+                <Text style={[styles.text_footer,{color: colors.text}]}>Email</Text>
 
                 <View style={styles.action}>
                     <FontAwesome
                         name='user-o'
-                        color='#525252'
+                        color={colors.text}
                         size={20}
                     />
                     <TextInput
                         placeholder='Your Email'
-                        style={styles.textInput}
+                        placeholderTextColor={colors.text}
+                        style={[styles.textInput,{color: colors.text}]}
                         autoCapitalize='none'
                         onChangeText={(val)=>textInputChange(val)}
+                        onEndEditing={(e)=>handleValidUser(e.nativeEvent.text)}
                     />
                     {data.check_textInputChange ?
                         <Animatable.View
@@ -102,21 +155,30 @@ const SignInScreen=({navigation})=>{
                     }
 
                 </View>
+                {
+                    data.isValidUser ?
+                        null :
+                        <Animatable.View animation='fadeInLeft' duration={500}>
+                            <Text style={styles.errorMsg}>Username Must be 4 character long</Text>
+                        </Animatable.View>
+                }
+
 
                 {/*======================================================================================*/}
 
-                <Text style={[styles.text_footer,{color:'#05375a' , marginTop: 35}]}>Password</Text>
+                <Text style={[styles.text_footer,{color:colors.text , marginTop: 35}]}>Password</Text>
 
                 <View style={styles.action}>
                     <FontAwesome
                         name='lock'
-                        color='#525252'
+                        color={colors.text}
                         size={20}
                     />
 
                     <TextInput
                         placeholder='Your Password'
-                        style={styles.textInput}
+                        placeholderTextColor={colors.text}
+                        style={[styles.textInput,{color: colors.text}]}
                         autoCapitalize='none'
                         secureTextEntry={data.secureTextEntry ? true: false}
                         onChangeText={(val)=>handlePasswordChange(val)}
@@ -138,6 +200,16 @@ const SignInScreen=({navigation})=>{
                         }
                     </TouchableOpacity>
                 </View>
+
+                {
+                    data.isValidPassword ?
+                        null :
+                        <Animatable.View animation='fadeInLeft' duration={500}>
+                            <Text style={styles.errorMsg}>Password Must be 8 character long</Text>
+                        </Animatable.View>
+                }
+
+
 
 
 
@@ -170,6 +242,8 @@ const SignInScreen=({navigation})=>{
                     </TouchableOpacity>
 
                 </View>
+
+                </KeyboardAwareScrollView>
 
 
 

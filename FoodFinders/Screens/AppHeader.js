@@ -1,7 +1,9 @@
-import * as React from 'react';
+import React,{useContext} from 'react';
 import {StyleSheet,StatusBar,View} from 'react-native'
 import { Appbar } from 'react-native-paper';
 import {getBackgroundColor} from "react-native/Libraries/LogBox/UI/LogBoxStyle";
+import {useTheme} from "@react-navigation/native";
+import {AuthContext} from "../Store/Context/AuthContext";
 
 const AppHeader = (props) => {
     const _goBack = () => props.navigation.goBack();
@@ -10,6 +12,7 @@ const AppHeader = (props) => {
 
     const handleS = () => {};
 
+    const authContext = useContext(AuthContext)
     return (
         <View>
             <Appbar.Header style={{backgroundColor: props.backgroundColor, elevation:5,}} >
@@ -28,7 +31,10 @@ const AppHeader = (props) => {
                 }
 
             </Appbar.Header>
-            <StatusBar backgroundColor={props.backgroundColor} barStyle='light-content'/>
+            <StatusBar
+                // barStyle={authContext.isThemeDark ? 'dark-content':'light-content'}
+                   backgroundColor={props.backgroundColor} barStyle='light-content'
+            />
 
         </View>
 

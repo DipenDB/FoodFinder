@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useContext} from 'react'
 import {View,StyleSheet} from 'react-native'
 import {DrawerContentScrollView, DrawerItem,DrawerItemList} from "@react-navigation/drawer";
 import {
@@ -14,11 +14,12 @@ import {
 } from 'react-native-paper';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import DrawerSection from "react-native-paper/src/components/Drawer/DrawerSection";
+import {AuthContext} from "../../Store/Context/AuthContext";
 const DrawerContent =({...props})=>{
-    const [isSwitchOn, setIsSwitchOn] = React.useState(false);
 
-    const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
+    const paperTheme=useTheme();
 
+    const authContext=useContext(AuthContext)
 
     return(
         <View style={{flex:1}}>
@@ -110,12 +111,19 @@ const DrawerContent =({...props})=>{
                     </Drawer.Section>
 
                     <Drawer.Section title='Preference'>
-                        <TouchableRipple>
+                        {/*<TouchableRipple*/}
+                        {/*    // onPress={()=>authContext.toggleTheme()}*/}
+                        {/*>*/}
                             <View style={styles.preference}>
                                 <Text>Dark Theme</Text>
-                                <Switch color='blue' value={isSwitchOn} onValueChange={onToggleSwitch}/>
+                                <Switch color='blue'
+                                        onValueChange={authContext.toggleTheme}
+                                        value={authContext.isThemeDark}
+                                        // value={paperTheme.dark}
+                                        // onValueChange={authContext.toggleTheme()}
+                                />
                             </View>
-                        </TouchableRipple>
+                        {/*</TouchableRipple>*/}
                     </Drawer.Section>
 
 

@@ -1,8 +1,11 @@
 import React,{useContext} from 'react'
+import {View,Text} from 'react-native'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import AuthProvider from '../Store/Provider/AuthProvider'
 import StackTabBottomNavigation from "./StackTabBottomNavigation";
-import {NavigationContainer} from "@react-navigation/native";
+import {NavigationContainer,
+    DarkTheme as NavigationDarkTheme,
+    DefaultTheme as NavigationDefaultTheme,} from "@react-navigation/native";
 import RootStackScreen from "./AuthNavigations/RootStackScreen";
 import {AuthContext} from "../Store/Context/AuthContext";
 
@@ -12,16 +15,19 @@ const Tab = createMaterialBottomTabNavigator();
 const Navigation=()=>{
     const authContext =useContext(AuthContext)
 
-    console.log(authContext.userToken)
+    // console.log(authContext.userToken)
     return(
-            <NavigationContainer>
 
-                {
-                    authContext.userToken ==null ? <RootStackScreen/>:<StackTabBottomNavigation/>
-                }
+        <StackTabBottomNavigation/>
+    // <RootStackScreen/>
+
+        // <NavigationContainer theme={NavigationDarkTheme}>
+        // {
+        //             authContext.userToken ==null ? <StackTabBottomNavigation/>:<RootStackScreen/>
+        // }
+        // </NavigationContainer>
 
 
-            </NavigationContainer>
     )
 }
 

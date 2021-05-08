@@ -14,8 +14,13 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
+import {useTheme} from "react-native-paper";
+
 
 const SignUpScreen=({navigation})=>{
+    const {colors}=useTheme()
+
     const [data,setData]= React.useState({
         email:'',
         password:'',
@@ -74,27 +79,31 @@ const SignUpScreen=({navigation})=>{
 
     return(
         <View style={styles.container}>
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{flex: 1, width:'100%'}}
+                                     keyboardShouldPersistTaps='always'>
+
             <StatusBar backgroundColor='#009387' barStyle="light-content"/>
 
             <View style={styles.header}>
-                <Text style={styles.text_header}>Welcome</Text>
+                <Text style={styles.text_header}>Register Now</Text>
             </View>
 
 
             <Animatable.View
                 animation='fadeInUpBig'
-                style={styles.footer}>
-                <Text style={styles.text_footer}>Email</Text>
+                style={[styles.footer,,{backgroundColor: colors.background}]}>
+                <Text style={[styles.text_footer,{color:colors.text}]}>Email</Text>
 
                 <View style={styles.action}>
                     <FontAwesome
                         name='user-o'
-                        color='#525252'
+                        color={colors.text}
                         size={20}
                     />
                     <TextInput
                         placeholder='Your Email'
-                        style={styles.textInput}
+                        placeholderTextColor={colors.text}
+                        style={[styles.textInput,{color:colors.text}]}
                         autoCapitalize='none'
                         onChangeText={(val)=>textInputChange(val)}
                     />
@@ -115,18 +124,19 @@ const SignUpScreen=({navigation})=>{
 
                 {/*========================================================================*/}
 
-                <Text style={[styles.text_footer,{color:'#05375a' , marginTop: 35}]}>Password</Text>
+                <Text style={[styles.text_footer,{color:colors.text , marginTop: 35}]}>Password</Text>
 
                 <View style={styles.action}>
                     <FontAwesome
                         name='lock'
-                        color='#525252'
+                        color={colors.text}
                         size={20}
                     />
 
                     <TextInput
                         placeholder='Your Password'
-                        style={styles.textInput}
+                        placeholderTextColor={colors.text}
+                        style={[styles.textInput,{color:colors.text}]}
                         autoCapitalize='none'
                         secureTextEntry={data.secureTextEntry ? true: false}
                         onChangeText={(val)=>handlePasswordChange(val)}
@@ -150,17 +160,18 @@ const SignUpScreen=({navigation})=>{
                 </View>
 
                 {/*========================================================================*/}
-                <Text style={[styles.text_footer,{color:'#05375a' , marginTop: 35}]}>Confirm Password</Text>
+                <Text style={[styles.text_footer,{color:colors.text , marginTop: 35}]}>Confirm Password</Text>
                 <View style={styles.action}>
                     <FontAwesome
                         name='lock'
-                        color='#525252'
+                        color={colors.text}
                         size={20}
                     />
 
                     <TextInput
                         placeholder='Confirm Password'
-                        style={styles.textInput}
+                        placeholderTextColor={colors.text}
+                        style={[styles.textInput,{color:colors.text}]}
                         autoCapitalize='none'
                         secureTextEntry={data.secureTextEntry ? true: false}
                         onChangeText={(val)=>handleConfirmPasswordChange(val)}
@@ -224,7 +235,7 @@ const SignUpScreen=({navigation})=>{
 
 
             </Animatable.View>
-
+            </KeyboardAwareScrollView>
         </View>
 
     )

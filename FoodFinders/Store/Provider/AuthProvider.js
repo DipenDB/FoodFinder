@@ -8,6 +8,7 @@ class AuthProvider extends React.Component{
     state={
         isLoading : true,
         userToken:null,
+        isThemeDark:false,
     }
 
     if (isLoading){
@@ -51,6 +52,13 @@ class AuthProvider extends React.Component{
         })
     }
 
+    toggleTheme = ()=>{
+        this.setState({
+            ...this.state,
+            isThemeDark:!this.state.isThemeDark
+        })
+    }
+
 
 
     render(){
@@ -60,6 +68,7 @@ class AuthProvider extends React.Component{
                 signIn: this.signIn,
                 signUp: this.signUp,
                 signOut: this.signOut,
+                toggleTheme:this.toggleTheme
             }}>
                 {this.props.children}
             </AuthContext.Provider>
