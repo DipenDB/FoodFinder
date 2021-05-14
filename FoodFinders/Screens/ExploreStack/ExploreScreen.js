@@ -1,9 +1,19 @@
 
 
 import React,{useContext} from 'react';
-import {View,Text,StyleSheet,Image,Dimensions,Platform,StatusBar} from 'react-native';
+import {View,Text,StyleSheet,Image,ScrollView,TouchableOpacity,Dimensions,TextInput,Platform,StatusBar} from 'react-native';
 import MapView, { PROVIDER_GOOGLE,Marker,Callout } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import {AuthContext} from "../../Store/Context/AuthContext";
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Fontisto from 'react-native-vector-icons/Fontisto';
+import {markers,mapDarkStyle,mapStandardStyle} from '../../Assets/MapData/MapData'
+import index from "@react-native-community/masked-view";
+import RatingReview from "../RatingReview/RatingReview";
+
+
+
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 220;
@@ -12,9 +22,46 @@ const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
 
 
 
-const ExploreScreen=()=>{
+// const ExploreScreen=()=>{
+    const ExploreScreen=()=>{
 
+    // const authContext = useContext(AuthContext)
     const authContext = useContext(AuthContext)
+
+    const [state,setState]=React.useState(initialMapState)
+
+        const initialMapState = {
+            markers,
+            categories: [
+                {
+                    name: 'Fastfood Center',
+                    icon: <MaterialCommunityIcons style={styles.chipsIcon} name="food-fork-drink" size={18}/>,
+                },
+                {
+                    name: 'Restaurant',
+                    icon: <Ionicons name="ios-restaurant" style={styles.chipsIcon} size={18}/>,
+                },
+                {
+                    name: 'Dineouts',
+                    icon: <Ionicons name="md-restaurant" style={styles.chipsIcon} size={18}/>,
+                },
+                {
+                    name: 'Snacks Corner',
+                    icon: <MaterialCommunityIcons name="food" style={styles.chipsIcon} size={18}/>,
+                },
+                {
+                    name: 'Hotel',
+                    icon: <Fontisto name="hotel" style={styles.chipsIcon} size={15}/>,
+                },
+            ],
+            region: {
+                latitude: 27.736687,
+                longitude: 85.324633,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+            },
+        };
+
 
     return(
         <View style={styles.container}>
@@ -22,221 +69,119 @@ const ExploreScreen=()=>{
                 provider={PROVIDER_GOOGLE} // remove if not using Google Maps
                 style={styles.map}
                 customMapStyle={ authContext.isThemeDark ? mapDarkStyle : mapStandardStyle}
-                region={{
-                    latitude: 27.736687,
-                    longitude: 85.324633,
-                    latitudeDelta: 0.01,
-                    longitudeDelta: 0.01,
+                initialRegion={initialMapState.region}
+                // region={{
+                //     latitude: 27.736687,
+                //     longitude: 85.324633,
+                //     latitudeDelta: 0.01,
+                //     longitudeDelta: 0.01,
+                // }}
+            >
+
+                {initialMapState.markers.map((marker,index)=>{
+                    return(
+                        <Marker
+                            key={index}
+                            draggable
+                            coordinate={marker.coordinate}
+                            // onPress={{}}
+                            // image={require('../../Assets/Images/location.png')}
+                            title='First'
+                            description='This is first description.'
+                        >
+                            <View style={[styles.markerWrap]}>
+                                <Image
+                                    source={require('../../Assets/Images/location.png')}
+                                    style={[styles.marker]}
+                                    resizeMode="cover"
+                                />
+                            </View>
+
+                        </Marker>
+                    )
+                })}
+            </MapView>
+
+            <View style={styles.searchBox}>
+                <TextInput
+                    placeholder='Search here'
+                    placeholderTextColor='#000'
+                    auticapitalize='none'
+                    style={{flex:1,padding:0}}
+
+                />
+                <Ionicons name='ios-search' size={20}/>
+            </View>
+
+
+            <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                scrollEventThrottle={1}
+                height={50}
+                style={styles.chipsScrollView}
+            >
+                {initialMapState.categories.map((category,index)=>(
+                    <TouchableOpacity key={index} style={styles.chipsItem}>
+                        {category.icon}
+                        <Text>{category.name}</Text>
+                    </TouchableOpacity>
+
+                ))}
+            </ScrollView>
+
+
+            <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                scrollEventThrottle={1}
+                style={styles.scrollView}
+
+                pagingEnabled
+                snapToInterval={CARD_WIDTH + 20}
+                snapToAlignment='CENTER'
+
+                contentContainerStyle={{
+                    paddingHorizontal:Platform.OS==="android" ? SPACING_FOR_CARD_INSET : SPACING_FOR_CARD_INSET
                 }}
             >
 
-                <Marker
-                    draggable
-                    coordinate={{
-                        latitude: 27.736687,
-                        longitude: 85.324633,
-                    }}
-                    // image={require('../../Assets/Images/location.png')}
-                    title='First'
-                    description='This is first description.'
-                />
+                {initialMapState.markers.map((marker,index)=>(
+                    <View style={styles.card} key={index}>
+                        <Image
+                            source={marker.image}
+                            style={styles.cardImage}
+                            resizeMode='cover'
+                        />
+                        <View style={styles.textContent}>
+                            <Text numberOfLines={1} style={styles.cardTitle}>{marker.title}</Text>
+                            <RatingReview ratings={marker.rating} reviews={marker.reviews}/>
+                            <Text numberOfLines={1} style={styles.cardDescription}>{marker.title}</Text>
+
+                            <View style={styles.button}>
+                                <TouchableOpacity
+                                    onPress={()=>{}}
+                                    style={[styles.signIn,{borderColor:'#ff6347',borderWidth:1}]}
+                                >
+                                    <Text style={[styles.textSign,{color: '#ff6347'}]}>ORDER NOW</Text>
+
+                                </TouchableOpacity>
+                            </View>
+
+
+                        </View>
+
+                    </View>
+                ))}
+
+            </ScrollView>
 
 
 
-
-            </MapView>
         </View>
     )
 }
 
-const mapDarkStyle=[
-    {
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#212121"
-            }
-        ]
-    },
-    {
-        "elementType": "labels.icon",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#757575"
-            }
-        ]
-    },
-    {
-        "elementType": "labels.text.stroke",
-        "stylers": [
-            {
-                "color": "#212121"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#757575"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.country",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#9e9e9e"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.land_parcel",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.locality",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#bdbdbd"
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#757575"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#181818"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#616161"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "labels.text.stroke",
-        "stylers": [
-            {
-                "color": "#1b1b1b"
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "color": "#2c2c2c"
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#8a8a8a"
-            }
-        ]
-    },
-    {
-        "featureType": "road.arterial",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#373737"
-            }
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#3c3c3c"
-            }
-        ]
-    },
-    {
-        "featureType": "road.highway.controlled_access",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#4e4e4e"
-            }
-        ]
-    },
-    {
-        "featureType": "road.local",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#616161"
-            }
-        ]
-    },
-    {
-        "featureType": "transit",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#757575"
-            }
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#000000"
-            }
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#3d3d3d"
-            }
-        ]
-    }
-]
-
-const mapStandardStyle=[]
 
 
 const styles = StyleSheet.create({
@@ -258,7 +203,7 @@ const styles = StyleSheet.create({
     },
     searchBox: {
         position:'absolute',
-        marginTop: Platform.OS === 'ios' ? 40 : 20,
+        marginTop: Platform.OS === 'ios' ? 40 : 10,
         flexDirection:"row",
         backgroundColor: '#fff',
         width: '90%',
@@ -269,12 +214,13 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.5,
         shadowRadius: 5,
-        elevation: 10,
+        elevation: 5,
     },
     chipsScrollView: {
         position:'absolute',
         top:Platform.OS === 'ios' ? 90 : 80,
-        paddingHorizontal:10
+        paddingHorizontal:10,
+        marginRight: 20,
     },
     chipsIcon: {
         marginRight: 5,
@@ -328,7 +274,7 @@ const styles = StyleSheet.create({
         flex: 2,
         padding: 10,
     },
-    cardtitle: {
+    cardTitle: {
         fontSize: 12,
         // marginTop: 5,
         fontWeight: "bold",
@@ -345,7 +291,7 @@ const styles = StyleSheet.create({
     },
     marker: {
         width: 30,
-        height: 30,
+        height: 40,
     },
     button: {
         alignItems: 'center',
