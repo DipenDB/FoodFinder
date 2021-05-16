@@ -10,7 +10,7 @@ const AppHeader = (props) => {
 
     const handleF = () => props.navigation.openDrawer();
 
-    const handleS = () => {};
+    const handleS = () => props.navigation.navigate('EditProfile');
 
     const authContext = useContext(AuthContext)
     return (
@@ -32,8 +32,8 @@ const AppHeader = (props) => {
 
             </Appbar.Header>
             <StatusBar
-                // barStyle={authContext.isThemeDark ? 'dark-content':'light-content'}
-                   backgroundColor={props.backgroundColor} barStyle='light-content'
+                barStyle={authContext.isThemeDark ? 'dark-content':'light-content'}
+                   // backgroundColor={props.backgroundColor} barStyle='light-content'
             />
 
         </View>

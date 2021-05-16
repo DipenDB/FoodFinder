@@ -14,11 +14,13 @@ import Support from "../Screens/SupportStack/Support";
 import RootStackScreen from "./AuthNavigations/RootStackScreen";
 import {AuthContext} from "../Store/Context/AuthContext";
 import AuthProvider from '../Store/Provider/AuthProvider'
+import EditProfileScreen from "../Screens/ProfileStack/EditProfileScreen";
 
 
 const Drawer = createDrawerNavigator()
 const HomeStack=createStackNavigator()
 const DetailStack=createStackNavigator()
+const ProfileStack=createStackNavigator()
 const Tab = createMaterialBottomTabNavigator();
 
 const StackTabBottomNavigation=()=>{
@@ -53,6 +55,18 @@ const DetailStackScreens=()=>{
     )
 }
 //---------------------------------------------------------------------------------------------
+
+const ProfileStackScreens=()=>{
+    return(
+        <ProfileStack.Navigator>
+            <ProfileStack.Screen name='Profile' component={ProfileScreen} options={{headerShown:false}}/>
+            <ProfileStack.Screen name='EditProfile' component={EditProfileScreen} options={{headerShown:false}}/>
+
+        </ProfileStack.Navigator>
+    )
+}
+//---------------------------------------------------------------------------------------------
+
 const MainTabScreen=()=> {
     return (
         <Tab.Navigator
@@ -84,7 +98,7 @@ const MainTabScreen=()=> {
             />
             <Tab.Screen
                 name="Profile"
-                component={ProfileScreen}
+                component={ProfileStackScreens}
                 options={{
                     tabBarLabel: 'Profile',
                     tabBarColor:'#ff0088',
