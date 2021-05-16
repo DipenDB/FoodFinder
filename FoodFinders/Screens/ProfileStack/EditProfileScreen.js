@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {View,Text,StyleSheet,TouchableOpacity,ImageBackground,TextInput,ScrollView } from 'react-native';
 import AppHeader from "../AppHeader";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -6,15 +6,53 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import {useTheme} from "react-native-paper";
 
+import ImagePicker from 'react-native-image-crop-picker';
 
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 
 const EditProfileScreen=(props)=>{
+    const [image,setImage]=useState('https://dyl80ryjxr1ke.cloudfront.net/external_assets/hero_examples/hair_beach_v391182663/original.jpeg')
+
     const {colors} =useTheme()
 
     let bs = React.createRef();
     let fall = new Animated.Value(1);
+
+
+    const takePhotoFromCamera=()=>{
+        ImagePicker.openCamera({
+            width: 300,
+            height: 300,
+            cropping: true,
+            compressImageQuality:0.7,
+        }).then(image => {
+            console.log(image);
+            setImage(image.path)
+            //Hide BottomSheet after image selection
+            // bs.current.snapTo(1)
+        });
+    }
+
+    const choosePhotoFromLibrary=()=>{
+        ImagePicker.openPicker({
+            width: 300,
+            height: 300,
+            cropping: true,
+            compressImageQuality:0.7,
+        }).then(image => {
+            console.log(image);
+            setImage(image.path)
+            //Hide BottomSheet after image selection
+            // bs.current.snapTo(1)
+        });
+    }
+
+
+
+
+
+
 
     const renderHeader=()=>(
         <View style={styles.header}>
@@ -28,15 +66,15 @@ const EditProfileScreen=(props)=>{
         <View style={styles.panel}>
             <View style={{alignItems:'center'}}>
                 <Text style={styles.panelTitle}>upload Photo</Text>
-                <Text style={styles.panelSubtitle}>upload Photo</Text>
+                <Text style={styles.panelSubtitle}>Choose Yor Profile Picture</Text>
             </View>
 
             <TouchableOpacity style={styles.panelButton}>
-                <Text style={styles.panelButtonTitle} >Take Photo</Text>
+                <Text style={styles.panelButtonTitle} onPress={takePhotoFromCamera} >Take Photo</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.panelButton}>
-                <Text style={styles.panelButtonTitle} >Choose From Library</Text>
+                <Text style={styles.panelButtonTitle} onPress={choosePhotoFromLibrary}>Choose From Library</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.panelButton} onPress={()=>bs.current.snapTo(1)}>
@@ -77,7 +115,7 @@ const EditProfileScreen=(props)=>{
                     <TouchableOpacity onPress={()=>bs.current.snapTo(0)}>
                         <View style={{height:100,width:100,borderRadius:15,justifyContent:'center',alignItems:'center'}}>
                             <ImageBackground source={{
-                                uri:'https://dyl80ryjxr1ke.cloudfront.net/external_assets/hero_examples/hair_beach_v391182663/original.jpeg'
+                                uri:image
                                 }}
                                 style={{height:100,width:100}}
                                 imageStyle={{borderRadius:15}}
