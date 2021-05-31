@@ -18,7 +18,7 @@ const DetailScreen =(props)=>{
     const ListItemDelete=()=>{
         return(
             <View style={{backgroundColor:'red',width:70,borderTopRightRadius: 5,borderBottomRightRadius: 5}}>
-                
+
             </View>
         )
     }
